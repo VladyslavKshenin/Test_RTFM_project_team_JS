@@ -1,72 +1,93 @@
 import getRefs from './refs';
 import api from './books-api';
-// import markup from './markup';
+import amazon from '../images/modal-window/amazon.png';
+import amazon2x from '../images/modal-window/amazon@2x.png';
+import applebooks from '../images/modal-window/applebooks.png';
+import applebooks2x from '../images/modal-window/applebooks@2x.png';
 
 const refs = getRefs();
 const modal = document.getElementById('bookModal');
 const modalTitle = document.getElementById('bookModalTitle');
 const modalBody = document.getElementById('bookModalBody');
 const addToShoppingListBtn = document.getElementById('addToShoppingList');
-const modalCloseBtn = document.querySelector('.close');
-const modalCloseFooterBtn = document.querySelector('.btn-secondary');
+const modalCloseBtn = document.querySelector('.modal-close');
 
 let shoppingList = [];
 
 function openModal(bookId) {
   api.fetchBookById(bookId).then(book => {
     modalTitle.innerText = book.title;
-    modalTitle.dataset.bookId = bookId; // Додати dataset для збереження bookId
+    modalTitle.dataset.bookId = bookId;
+
     modalBody.innerHTML = `
-      <p><strong>Author:</strong> ${book.author}</p>
-      <p><strong>Description:</strong> ${book.description}</p>
+      <img src="${book.book_image}" alt="${book.title}" class="book-modal-img"/>
+      <div class="book-modal-details">
+        <h2 class="book-modal-title">${book.title}</h2>
+        <h3 class="book-modal-author">${book.author}</h3>
+        <p class="book-modal-desc">${book.description}</p>
+        <ul class="icon-book-modal-list">
+          <li>
+            <a href="${book.buy_links[0].url}" rel="noopener noreferrer nofollow" target="_blank">
+              <img class="icon-book-modal-amazon" srcset="${amazon} 1x, ${amazon2x} 2x" src="${amazon}" alt="Amazon" loading="lazy"/>
+            </a>
+          </li>
+          <li>
+            <a href="${book.buy_links[1].url}" rel="noopener noreferrer nofollow" target="_blank">
+              <img class="icon-book-modal-ibooks" srcset="${applebooks} 1x, ${applebooks2x} 2x" src="${applebooks}" alt="Apple books" loading="lazy"/>
+            </a>
+          </li>
+        </ul>
+      </div>
     `;
-    
-    // Перевірити, чи книга вже є в списку покупок
+
     if (shoppingList.includes(bookId)) {
-      addToShoppingListBtn.innerText = 'Remove from Shopping List';
+      addToShoppingListBtn.innerText = 'Remove from the shopping list';
     } else {
-      addToShoppingListBtn.innerText = 'Add to Shopping List';
+      addToShoppingListBtn.innerText = 'Add to shopping list';
     }
 
     modal.classList.add('show');
-    document.body.style.overflow = 'hidden'; // Вимкнути прокручування, коли відкрито вікно
+    document.body.style.overflow = 'hidden';
   });
 }
 
 function closeModal() {
   modal.classList.remove('show');
-  document.body.style.overflow = ''; // Увімкнути прокручування, коли вікно закрито
+  document.body.style.overflow = '';
 }
 
-function toggleShoppingList(bookId) {
-  console.log('Toggling shopping list for bookId:', bookId);
+function addToShoppingList(bookId) {
+  const currentBookId = modalTitle.dataset.bookId;
 
-  if (!bookId) {
-    console.error('Invalid bookId:', bookId);
-    return;
-  }
+  if (!shoppingList.includes(currentBookId)) {
+    shoppingList.push(currentBookId);
 
-  const index = shoppingList.indexOf(bookId);
-  if (index === -1) {
-    shoppingList.push(bookId);
+    // Отримати дані книги та зберегти їх у локальне сховище
+    api.fetchBookById(currentBookId).then(book => {
+      const savedBooks = JSON.parse(localStorage.getItem('savedBooks')) || [];
+      savedBooks.push(book);
+      localStorage.setItem('savedBooks', JSON.stringify(savedBooks));
+    });
+
+    localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
+    addToShoppingListBtn.innerText = 'Remove from the shopping list';
   } else {
+    const index = shoppingList.indexOf(currentBookId);
     shoppingList.splice(index, 1);
-  }
 
-  console.log('Updated shoppingList:', shoppingList);
+    // Видалити дані книги з локального сховища
+    const savedBooks = JSON.parse(localStorage.getItem('savedBooks')) || [];
+    const updatedBooks = savedBooks.filter(savedBook => savedBook.id !== currentBookId);
+    localStorage.setItem('savedBooks', JSON.stringify(updatedBooks));
 
-  localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
-
-  if (index === -1) {
-    addToShoppingListBtn.innerText = 'Remove from Shopping List';
-  } else {
-    addToShoppingListBtn.innerText = 'Add to Shopping List';
+    localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
+    addToShoppingListBtn.innerText = 'Add to shopping list';
   }
 }
 
 addToShoppingListBtn.addEventListener('click', () => {
-  const currentBookId = modalTitle.dataset.bookId; // Отримання bookId з dataset
-  toggleShoppingList(currentBookId);
+  const currentBookId = modalTitle.dataset.bookId;
+  addToShoppingList(currentBookId);
 });
 
 modal.addEventListener('click', event => {
@@ -86,8 +107,6 @@ refs.bookCollectionWrapper.addEventListener('click', event => {
   if (bookLink) {
     event.preventDefault();
     const bookId = bookLink.dataset.id;
-
-    // Виклик функції openModal для відображення модального вікна
     openModal(bookId);
   }
 });
@@ -98,6 +117,8 @@ if (savedShoppingList) {
   shoppingList = JSON.parse(savedShoppingList);
 }
 
-modalCloseBtn.addEventListener('click', closeModal);
-modalCloseFooterBtn.addEventListener('click', closeModal);
+modalCloseBtn.addEventListener('click', () => {
+  localStorage.removeItem('currentBook');
+  closeModal();
+});
 
