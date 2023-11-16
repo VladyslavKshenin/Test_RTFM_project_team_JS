@@ -21,7 +21,7 @@ function openModal(bookId) {
       <p><strong>Description:</strong> ${book.description}</p>
     `;
     
-    // Check if the book is already in the shopping list
+    // Перевірити, чи книга вже є в списку покупок
     if (shoppingList.includes(bookId)) {
       addToShoppingListBtn.innerText = 'Remove from Shopping List';
     } else {
