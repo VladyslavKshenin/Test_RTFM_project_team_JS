@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "start": "vite",
-    "build": "vite build --base=/Test_RTFM_project_team_JS",
+    "build": "vite build --base=/Test_RTFM_project_team_JS/",
     "preview": "vite preview"
   },
   "devDependencies": {
