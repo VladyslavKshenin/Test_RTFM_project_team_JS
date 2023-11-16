@@ -1,0 +1,178 @@
+/**
+  |============================
+  | include css partials with
+  | default @import url()
+  |============================
+*/
+@import url('./reset.css');
+@import url('./header.css');
+@import url('./category-sidebar.css');
+@import url('./content-home.css');
+@import url('./content-shopping.css');
+@import url('./mobile-window.css');
+@import url('./modal-window.css');
+@import url('./support-sidebar.css');
+@import url(./registration.css);
+
+:root {
+  /*Font*/
+  --primary-font: 'DM Sans', sans-serif;
+  /* Сolors */
+  --black: #111;
+  --black-one: #202024;
+  --violet: #4f2ee8;
+  --yellow: #eac645;
+  --white: #fff;
+  --grey: #b4afaf;
+  --background-body-light: #f6f6f6;
+  --background-body-dark: #202024;
+
+  /* Other */
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  src: url(../fonts/DMSans-Medium.woff2) format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  src: url(../fonts/DMSans-RegularItalic.woff2) format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  src: url(../fonts/DMSans-Bold.woff2) format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  src: url(../fonts/DMSans-Regular.woff2) format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+/* Base style */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+/* Common Style */
+.container {
+  min-width: 320px;
+  max-width: 375px;
+  padding: 0 20px;
+  margin: 0 auto;
+}
+
+/*  tablet screen */
+@media only screen and (min-width: 768px) {
+  .container {
+    max-width: 768px;
+    padding: 0 32px;
+  }
+}
+
+/*  desktop screen */
+@media only screen and (min-width: 1440px) {
+  .container {
+    max-width: 1440px;
+    padding: 0 24px;
+  }
+}
+/**
+  |============================
+  | for header aktive btn
+  |============================
+*/
+.heder-active {
+  background-color: rgba(234, 198, 69, 1);
+  
+}
+.dark-theme .heder-active {
+  color: var(--black);
+}
+
+body {
+  background-color: var(--background-body-light);
+  color: var(--black);
+  font-family: DM Sans;
+  font-size: 14px;
+  line-height: 1.28;
+  letter-spacing: -0.56px;
+  position: relative;
+}
+
+.section-position {
+  padding-top: 40px;
+  padding-bottom: 80px;
+}
+
+.ctg-sidebar {
+  margin-bottom: 40px;
+}
+
+.sidebar-home-section {
+  padding-bottom: 80px;
+}
+
+@media only screen and (min-width: 768px) {
+  .sidebar-home-section {
+    display: flex;
+    gap: 32px;
+    padding-bottom: 100px;
+  }
+
+  .ctg-sidebar {
+    margin-bottom: 0px;
+  }
+
+  .sidebar-home-section {
+    padding-bottom: 100px;
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .sidebar-home-section {
+    display: block;
+    margin-bottom: 0px;
+  }
+
+  .ctg-sidebar {
+    margin-bottom: 86px;
+  }
+
+  .container-positioned {
+    display: flex;
+    gap: 40px;
+    justify-content: start;
+  }
+  
+  .sidebar-home-section {
+    padding-bottom: 72px;
+  }
+}
+
