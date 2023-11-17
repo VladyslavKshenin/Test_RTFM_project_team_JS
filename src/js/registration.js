@@ -27,29 +27,31 @@ document.addEventListener('DOMContentLoaded', function () {
       const registrationForm = document.getElementById('registrationForm');
       const closeIcon = document.querySelector('.close-icon');
 
-      registrationForm.addEventListener('submit', function (event) {
+      registrationForm.addEventListener('submit', async function (event) {
         event.preventDefault();
 
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
-        if (name && email && password) {
-          console.log('User data:', { name, email, password });
+        try {
+          const userCredential = await firebase
+            .auth()
+            .createUserWithEmailAndPassword(email, password);
 
-          const userData = { name, email, password };
-          localStorage.setItem('userData', JSON.stringify(userData));
+          const userData = { name, email, uid: userCredential.user.uid };
+
+          await firebase
+            .firestore()
+            .collection('users')
+            .doc(userCredential.user.uid)
+            .set(userData);
+
+          console.log('User data:', userData);
 
           closeRegistrationModal();
-        } else {
-          const missingFields = [];
-          if (!name) missingFields.push('Name');
-          if (!email) missingFields.push('Email');
-          if (!password) missingFields.push('Password');
-
-          errorMessageElement.textContent = `Please fill in the following fields: ${missingFields.join(
-            ', '
-          )}`;
+        } catch (error) {
+          errorMessageElement.textContent = `Error creating user: ${error.message}`;
           errorMessageElement.style.display = 'block';
 
           setTimeout(function () {
@@ -66,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
       console.error('Error loading registration content:', error);
     }
   }
+
   function closeRegistrationModal() {
     const registrationModalContainer = document.getElementById(
       'registrationModalContainer'
