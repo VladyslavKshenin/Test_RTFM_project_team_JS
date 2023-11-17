@@ -14,54 +14,57 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.body.appendChild(errorMessageElement);
 
-  function openRegistrationModal() {
-    fetch('../partials/registration.html')
-      .then(response => response.text())
-      .then(html => {
-        const registrationModalContainer = document.getElementById(
-          'registrationModalContainer'
-        );
-        registrationModalContainer.innerHTML = html;
+  async function openRegistrationModal() {
+    try {
+      const response = await fetch('../partials/registration.html');
+      const html = await response.text();
 
-        const registrationForm = document.getElementById('registrationForm');
-        const closeIcon = document.querySelector('.close-icon');
+      const registrationModalContainer = document.getElementById(
+        'registrationModalContainer'
+      );
+      registrationModalContainer.innerHTML = html;
 
-        registrationForm.addEventListener('submit', function (event) {
-          event.preventDefault();
+      const registrationForm = document.getElementById('registrationForm');
+      const closeIcon = document.querySelector('.close-icon');
 
-          const name = document.getElementById('name').value;
-          const email = document.getElementById('email').value;
-          const password = document.getElementById('password').value;
+      registrationForm.addEventListener('submit', function (event) {
+        event.preventDefault();
 
-          if (name && email && password) {
-            console.log('User data:', { name, email, password });
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
 
-            const userData = { name, email, password };
-            localStorage.setItem('userData', JSON.stringify(userData));
+        if (name && email && password) {
+          console.log('User data:', { name, email, password });
 
-            closeRegistrationModal();
-          } else {
-            const missingFields = [];
-            if (!name) missingFields.push('Name');
-            if (!email) missingFields.push('Email');
-            if (!password) missingFields.push('Password');
+          const userData = { name, email, password };
+          localStorage.setItem('userData', JSON.stringify(userData));
 
-            errorMessageElement.textContent = `Please fill in the following fields: ${missingFields.join(
-              ', '
-            )}`;
-            errorMessageElement.style.display = 'block';
-
-            setTimeout(function () {
-              errorMessageElement.style.display = 'none';
-            }, 10000);
-          }
-        });
-
-        closeIcon.addEventListener('click', function () {
-          errorMessageElement.style.display = 'none';
           closeRegistrationModal();
-        });
+        } else {
+          const missingFields = [];
+          if (!name) missingFields.push('Name');
+          if (!email) missingFields.push('Email');
+          if (!password) missingFields.push('Password');
+
+          errorMessageElement.textContent = `Please fill in the following fields: ${missingFields.join(
+            ', '
+          )}`;
+          errorMessageElement.style.display = 'block';
+
+          setTimeout(function () {
+            errorMessageElement.style.display = 'none';
+          }, 10000);
+        }
       });
+
+      closeIcon.addEventListener('click', function () {
+        errorMessageElement.style.display = 'none';
+        closeRegistrationModal();
+      });
+    } catch (error) {
+      console.error('Error loading registration content:', error);
+    }
   }
   function closeRegistrationModal() {
     const registrationModalContainer = document.getElementById(
