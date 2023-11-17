@@ -167,6 +167,14 @@
     letter-spacing: -0.64px;
     text-transform: uppercase;
 
+
+    display: -webkit-box;
+    min-width: 100px;
+    margin-right: 40px;
+    -webkit-line-clamp: 1; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
     margin-bottom: 4px;
 }
 
@@ -179,6 +187,13 @@
     line-height: 116%;
     letter-spacing: 0.36px;
 
+    display: -webkit-box;
+    min-width: 160px;
+    margin-right: 40px;
+    -webkit-line-clamp: 1; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
     margin-bottom: 8px;
 }
 
@@ -197,8 +212,12 @@
     line-height: 128%;
     letter-spacing: -0.56px;
 
-    height: 48px;
+    min-width: 108px;
+    height: 55px;
 
+    display: -webkit-box;
+    -webkit-line-clamp: 3; 
+    -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: normal;
@@ -207,6 +226,14 @@
 @media only screen and (min-width: 768px) {
     .shopping-list-card-desc {
         height: 86px;
+        min-width: 520px;
+        -webkit-line-clamp: 5; 
+    }
+}
+
+@media only screen and (min-width: 1440px) {
+    .shopping-list-card-desc {
+        min-width: 796px;
     }
 }
 
@@ -219,6 +246,7 @@
 .shopping-list-card-container-img {
     display: flex;
     gap: 8px;
+    min-width: 56px;
     align-items: center;
 }
 
@@ -243,7 +271,7 @@
 }
 
 .dark-theme .shopping-list-card-icon-amazon:hover {
-    filter: drop-shadow(0px 3px 3px rgba(255, 255, 255, 0.35));
+    filter: drop-shadow(0px 3px 3px rgba(255, 255, 255, 1));
 }
 
 @media only screen and (min-width: 768px) {
@@ -286,6 +314,12 @@
     font-weight: 400;
     line-height: 116%;
     letter-spacing: -0.48px;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 1; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .shopping-list-card-container-trash {
