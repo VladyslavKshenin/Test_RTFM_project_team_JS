@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 
-import { firebaseConfig } from './firebaseConfig.js';
+import { firebaseConfig } from './firebaseConfig';
 
 document.addEventListener('DOMContentLoaded', function () {
   const signupBtn = document.getElementById('signupBtn');
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   async function openRegistrationModal() {
     try {
-      const response = await fetch('../partials/registration.html');
+      const response = await fetch('./partials/registration.html');
       const html = await response.text();
 
       const registrationModalContainer = document.getElementById(
