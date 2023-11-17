@@ -5,7 +5,11 @@ import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import { firebaseConfig } from './firebaseConfig.js';
 document.addEventListener('DOMContentLoaded', function () {
   const signupBtn = document.getElementById('signupBtn');
-  signupBtn.addEventListener('click', openRegistrationModal);
+  if (signupBtn) {
+    signupBtn.addEventListener('click', openRegistrationModal);
+  } else {
+    console.error('Element with id "signupBtn" not found');
+  }
 
   const errorMessageElement = document.createElement('div');
   errorMessageElement.style.position = 'fixed';
