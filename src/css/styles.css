@@ -12,7 +12,7 @@
 @import url('./mobile-window.css');
 @import url('./modal-window.css');
 @import url('./support-sidebar.css');
-@import url(./registration.css);
+@import url('./registration.css');
 
 :root {
   /*Font*/
@@ -110,7 +110,6 @@
 */
 .heder-active {
   background-color: rgba(234, 198, 69, 1);
-  
 }
 .dark-theme .heder-active {
   color: var(--black);
@@ -170,9 +169,8 @@ body {
     gap: 40px;
     justify-content: start;
   }
-  
+
   .sidebar-home-section {
     padding-bottom: 72px;
   }
 }
-
