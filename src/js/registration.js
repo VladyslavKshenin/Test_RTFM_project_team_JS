@@ -3,6 +3,7 @@ import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 
 import { firebaseConfig } from './firebaseConfig.js';
+
 document.addEventListener('DOMContentLoaded', function () {
   const signupBtn = document.getElementById('signupBtn');
   if (signupBtn) {
@@ -35,48 +36,52 @@ document.addEventListener('DOMContentLoaded', function () {
       const registrationModalContainer = document.getElementById(
         'registrationModalContainer'
       );
-      registrationModalContainer.innerHTML = html;
+      if (registrationModalContainer) {
+        registrationModalContainer.innerHTML = html;
 
-      const registrationForm = document.getElementById('registrationForm');
-      const closeIcon = document.querySelector('.close-icon');
+        const registrationForm = document.getElementById('registrationForm');
+        const closeIcon = document.querySelector('.close-icon');
 
-      registrationForm.addEventListener('submit', async function (event) {
-        event.preventDefault();
+        registrationForm.addEventListener('submit', async function (event) {
+          event.preventDefault();
 
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+          const name = document.getElementById('name').value;
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
 
-        try {
-          const userCredential = await createUserWithEmailAndPassword(
-            auth,
-            email,
-            password
-          );
+          try {
+            const userCredential = await createUserWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
 
-          const userData = { name, email, uid: userCredential.user.uid };
-          await setDoc(
-            doc(firestore, 'users', userCredential.user.uid),
-            userData
-          );
+            const userData = { name, email, uid: userCredential.user.uid };
+            await setDoc(
+              doc(firestore, 'users', userCredential.user.uid),
+              userData
+            );
 
-          console.log('User data:', userData);
+            console.log('User data:', userData);
 
+            closeRegistrationModal();
+          } catch (error) {
+            errorMessageElement.textContent = `Error creating user: ${error.message}`;
+            errorMessageElement.style.display = 'block';
+
+            setTimeout(function () {
+              errorMessageElement.style.display = 'none';
+            }, 10000);
+          }
+        });
+
+        closeIcon.addEventListener('click', function () {
+          errorMessageElement.style.display = 'none';
           closeRegistrationModal();
-        } catch (error) {
-          errorMessageElement.textContent = `Error creating user: ${error.message}`;
-          errorMessageElement.style.display = 'block';
-
-          setTimeout(function () {
-            errorMessageElement.style.display = 'none';
-          }, 10000);
-        }
-      });
-
-      closeIcon.addEventListener('click', function () {
-        errorMessageElement.style.display = 'none';
-        closeRegistrationModal();
-      });
+        });
+      } else {
+        console.error('Element with id "registrationModalContainer" not found');
+      }
     } catch (error) {
       console.error('Error loading registration content:', error);
     }
@@ -86,6 +91,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const registrationModalContainer = document.getElementById(
       'registrationModalContainer'
     );
-    registrationModalContainer.innerHTML = '';
+    if (registrationModalContainer) {
+      registrationModalContainer.innerHTML = '';
+    } else {
+      console.error('Element with id "registrationModalContainer" not found');
+    }
   }
 });
