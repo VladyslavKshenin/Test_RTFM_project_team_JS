@@ -1,3 +1,8 @@
+import { initializeApp } from 'firebase/app';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
+
+import { firebaseConfig } from './firebaseConfig.js';
 document.addEventListener('DOMContentLoaded', function () {
   const signupBtn = document.getElementById('signupBtn');
   signupBtn.addEventListener('click', openRegistrationModal);
@@ -13,6 +18,10 @@ document.addEventListener('DOMContentLoaded', function () {
   errorMessageElement.style.zIndex = '1';
 
   document.body.appendChild(errorMessageElement);
+
+  const firebaseApp = initializeApp(firebaseConfig);
+  const auth = getAuth(firebaseApp);
+  const firestore = getFirestore(firebaseApp);
 
   async function openRegistrationModal() {
     try {
@@ -35,17 +44,17 @@ document.addEventListener('DOMContentLoaded', function () {
         const password = document.getElementById('password').value;
 
         try {
-          const userCredential = await firebase
-            .auth()
-            .createUserWithEmailAndPassword(email, password);
+          const userCredential = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
 
           const userData = { name, email, uid: userCredential.user.uid };
-
-          await firebase
-            .firestore()
-            .collection('users')
-            .doc(userCredential.user.uid)
-            .set(userData);
+          await setDoc(
+            doc(firestore, 'users', userCredential.user.uid),
+            userData
+          );
 
           console.log('User data:', userData);
 
