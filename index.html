@@ -13,8 +13,8 @@
     <!--Custom styles-->
     
     <script type="module" crossorigin src="/Test_RTFM_project_team_JS/commonHelpers.js"></script>
-    <link rel="modulepreload" crossorigin href="/Test_RTFM_project_team_JS/assets/applebooks@2x-9bf15c24.js">
-    <link rel="stylesheet" href="/Test_RTFM_project_team_JS/assets/index-7396d8b3.css">
+    <link rel="modulepreload" crossorigin href="/Test_RTFM_project_team_JS/assets/applebooks@2x-32274212.js">
+    <link rel="stylesheet" href="/Test_RTFM_project_team_JS/assets/index-bb4a7b27.css">
   </head>
   <body>
     <!-- Header -->
@@ -231,6 +231,9 @@
           <!-- Content -->
           <section class="content-home-section">
             <div class="book-collection-wrapper">
+  <!-- <div class="dots-bars-wrapper"> -->
+  <div class="dots-bars"></div>
+  <!-- </div> -->
   <!-- <div class="selected-ctg-heading">
   <h1 class="selected-ctg-name"></h1>
 </div> 
@@ -238,7 +241,9 @@
 </div>
 
           </section>
-          <div class="modal" id="bookModal">
+        </div>
+      </section>
+      <div class="modal" id="bookModal">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -249,7 +254,7 @@
           data-dismiss="modal"
           aria-label="Close"
         >
-          <svg class="book-modal-close" width="20" height="20">
+          <svg class="book-modal-close" width="24" height="24">
             <use href="/Test_RTFM_project_team_JS/assets/icons-bb60c522.svg#x-close"></use>
           </svg>
           <!-- <span aria-hidden="true">&times;</span> -->
@@ -262,6 +267,7 @@
         <button type="button" class="btn btn-primary" id="addToShoppingList">
           Add to shopping list
         </button>
+        <p class="modal-footer-text" id="modalFooterText">Congratulations! You have added the book to the shopping list. To delete, press the button “Remove from the shopping list”.</p>
         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">
           Close
         </button> -->
@@ -270,8 +276,6 @@
   </div>
 </div>
 
-        </div>
-      </section>
     </main>
 
     
