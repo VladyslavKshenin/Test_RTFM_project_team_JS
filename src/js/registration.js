@@ -61,10 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
           errorMessageElement.style.display = 'none';
           closeRegistrationModal();
         });
-      })
-      .catch(error =>
-        console.error('Error loading registration content:', error)
-      );
+      });
   }
   function closeRegistrationModal() {
     const registrationModalContainer = document.getElementById(
