@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const registrationForm = document.getElementById('registrationForm');
         const closeIcon = document.querySelector('.close-icon');
 
-        registrationForm.addEventListener('submit', function (event) {
+        const handleSubmit = function (event) {
           event.preventDefault();
 
           const name = document.getElementById('name').value;
@@ -41,27 +41,41 @@ document.addEventListener('DOMContentLoaded', function () {
 
             closeRegistrationModal();
           } else {
-            const missingFields = [];
-            if (!name) missingFields.push('Name');
-            if (!email) missingFields.push('Email');
-            if (!password) missingFields.push('Password');
-
-            errorMessageElement.textContent = `Please fill in the following fields: ${missingFields.join(
-              ', '
-            )}`;
-            errorMessageElement.style.display = 'block';
-
-            setTimeout(function () {
-              errorMessageElement.style.display = 'none';
-            }, 10000);
+            handleMissingFields();
           }
-        });
+        };
+
+        const handleMissingFields = function () {
+          const name = document.getElementById('name').value;
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+
+          const missingFields = [];
+          if (!name) missingFields.push('Name');
+          if (!email) missingFields.push('Email');
+          if (!password) missingFields.push('Password');
+
+          errorMessageElement.textContent = `Please fill in the following fields: ${missingFields.join(
+            ', '
+          )}`;
+          errorMessageElement.style.display = 'block';
+
+          setTimeout(function () {
+            errorMessageElement.style.display = 'none';
+          }, 10000);
+        };
+
+        registrationForm.addEventListener('submit', handleSubmit);
 
         closeIcon.addEventListener('click', function () {
           errorMessageElement.style.display = 'none';
           closeRegistrationModal();
         });
-      });
+      })
+
+      .catch(error =>
+        console.error('Error loading registration content:', error)
+      );
   }
 
   function closeRegistrationModal() {
