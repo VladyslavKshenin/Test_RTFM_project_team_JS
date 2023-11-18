@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.body.appendChild(errorMessageElement);
 
-  // Новая функция, убирающая <meta> с CSP
+  // Новая функция, удаляющая <meta> с CSP
   function removeCSPMeta() {
     const cspMeta = document.querySelector(
       'meta[http-equiv="Content-Security-Policy"]'
@@ -29,7 +29,14 @@ document.addEventListener('DOMContentLoaded', function () {
     removeCSPMeta();
 
     fetch('/partials/registration.html')
-      .then(response => response.text())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch registration content: ${response.statusText}`
+          );
+        }
+        return response.text();
+      })
       .then(html => {
         const registrationModalContainer = document.getElementById(
           'registrationModalContainer'
