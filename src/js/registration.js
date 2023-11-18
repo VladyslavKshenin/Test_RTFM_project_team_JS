@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('Error loading registration content:', error)
       );
   }
+
   function closeRegistrationModal() {
     const registrationModalContainer = document.getElementById(
       'registrationModalContainer'
