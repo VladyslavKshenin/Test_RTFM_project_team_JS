@@ -15,19 +15,13 @@ document.addEventListener('DOMContentLoaded', function () {
   document.body.appendChild(errorMessageElement);
 
   function openRegistrationModal() {
-    // Удалите следующие строки, которые добавляют метатег Content-Security-Policy
-    // const meta = document.createElement('meta');
-    // meta.httpEquiv = 'Content-Security-Policy';
-    // meta.content = "default-src 'none'; style-src 'unsafe-inline'; img-src data:; connect-src 'self'";
-    // document.head.appendChild(meta);
-
     fetch('/partials/registration.html')
       .then(response => response.text())
       .then(html => {
         const registrationModalContainer = document.getElementById(
           'registrationModalContainer'
         );
-        registrationModalContainer.innerHTML = html;
+        registrationModalContainer.insertAdjacentHTML('beforeend', html);
 
         const registrationForm = document.getElementById('registrationForm');
         const closeIcon = document.querySelector('.close-icon');
