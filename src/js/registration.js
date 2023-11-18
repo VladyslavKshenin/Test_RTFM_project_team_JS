@@ -1,9 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const meta = document.createElement('meta');
-  meta.httpEquiv = 'Content-Security-Policy';
-  meta.content =
-    "default-src 'none'; style-src 'unsafe-inline'; img-src data:; connect-src 'self'";
-  document.head.appendChild(meta);
   const signupBtn = document.getElementById('signupBtn');
   signupBtn.addEventListener('click', openRegistrationModal);
 
@@ -66,10 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
           errorMessageElement.style.display = 'none';
           closeRegistrationModal();
         });
-      })
-      .catch(error =>
-        console.error('Error loading registration content:', error)
-      );
+      });
   }
 
   function closeRegistrationModal() {
