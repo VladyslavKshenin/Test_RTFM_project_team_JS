@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
   signupBtn.addEventListener('click', openRegistrationModal);
 
   function openRegistrationModal() {
-    fetch('./partials/registration.html')
+    fetch('/partials/registration.html')
       .then(response => {
         if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.status}`);
