@@ -1,16 +1,6 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
-
-import { firebaseConfig } from './firebaseConfig';
-
 document.addEventListener('DOMContentLoaded', function () {
   const signupBtn = document.getElementById('signupBtn');
-  if (signupBtn) {
-    signupBtn.addEventListener('click', openRegistrationModal);
-  } else {
-    console.error('Element with id "signupBtn" not found');
-  }
+  signupBtn.addEventListener('click', openRegistrationModal);
 
   const errorMessageElement = document.createElement('div');
   errorMessageElement.style.position = 'fixed';
@@ -24,49 +14,43 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.body.appendChild(errorMessageElement);
 
-  const firebaseApp = initializeApp(firebaseConfig);
-  const auth = getAuth(firebaseApp);
-  const firestore = getFirestore(firebaseApp);
-
-  async function openRegistrationModal() {
-    try {
-      const response = await fetch('./partials/registration.html');
-      const html = await response.text();
-
-      const registrationModalContainer = document.getElementById(
-        'registrationModalContainer'
-      );
-      if (registrationModalContainer) {
+  function openRegistrationModal() {
+    fetch(
+      'https://vladyslavkshenin.github.io/Test_RTFM_project_team_JS/partials/registration.html'
+    )
+      .then(response => response.text())
+      .then(html => {
+        const registrationModalContainer = document.getElementById(
+          'registrationModalContainer'
+        );
         registrationModalContainer.innerHTML = html;
 
         const registrationForm = document.getElementById('registrationForm');
         const closeIcon = document.querySelector('.close-icon');
 
-        registrationForm.addEventListener('submit', async function (event) {
+        registrationForm.addEventListener('submit', function (event) {
           event.preventDefault();
 
           const name = document.getElementById('name').value;
           const email = document.getElementById('email').value;
           const password = document.getElementById('password').value;
 
-          try {
-            const userCredential = await createUserWithEmailAndPassword(
-              auth,
-              email,
-              password
-            );
+          if (name && email && password) {
+            console.log('User data:', { name, email, password });
 
-            const userData = { name, email, uid: userCredential.user.uid };
-            await setDoc(
-              doc(firestore, 'users', userCredential.user.uid),
-              userData
-            );
-
-            console.log('User data:', userData);
+            const userData = { name, email, password };
+            localStorage.setItem('userData', JSON.stringify(userData));
 
             closeRegistrationModal();
-          } catch (error) {
-            errorMessageElement.textContent = `Error creating user: ${error.message}`;
+          } else {
+            const missingFields = [];
+            if (!name) missingFields.push('Name');
+            if (!email) missingFields.push('Email');
+            if (!password) missingFields.push('Password');
+
+            errorMessageElement.textContent = `Please fill in the following fields: ${missingFields.join(
+              ', '
+            )}`;
             errorMessageElement.style.display = 'block';
 
             setTimeout(function () {
@@ -79,22 +63,15 @@ document.addEventListener('DOMContentLoaded', function () {
           errorMessageElement.style.display = 'none';
           closeRegistrationModal();
         });
-      } else {
-        console.error('Element with id "registrationModalContainer" not found');
-      }
-    } catch (error) {
-      console.error('Error loading registration content:', error);
-    }
+      })
+      .catch(error =>
+        console.error('Error loading registration content:', error)
+      );
   }
-
   function closeRegistrationModal() {
     const registrationModalContainer = document.getElementById(
       'registrationModalContainer'
     );
-    if (registrationModalContainer) {
-      registrationModalContainer.innerHTML = '';
-    } else {
-      console.error('Element with id "registrationModalContainer" not found');
-    }
+    registrationModalContainer.innerHTML = '';
   }
 });
