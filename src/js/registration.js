@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function () {
   signupBtn.addEventListener('click', openRegistrationModal);
 
   function openRegistrationModal() {
-    // Fetch the content of registration.html
     fetch('./partials/registration.html')
       .then(response => {
         if (!response.ok) {
@@ -12,14 +11,11 @@ document.addEventListener('DOMContentLoaded', function () {
         return response.text();
       })
       .then(htmlContent => {
-        // Inject the HTML content into the DOM
         const modalContainer = document.createElement('div');
         modalContainer.innerHTML = htmlContent;
 
-        // Append the modal container to the body or another desired location
         document.body.appendChild(modalContainer);
 
-        // Now, you can add additional logic to handle the opened modal
         console.log('Модальное окно регистрации открыто!');
       })
       .catch(error => {
