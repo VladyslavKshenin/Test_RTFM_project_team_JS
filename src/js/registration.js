@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 document.addEventListener('DOMContentLoaded', function () {
   const signupBtn = document.getElementById('signupBtn');
   signupBtn.addEventListener('click', openRegistrationModal);
@@ -17,16 +15,13 @@ document.addEventListener('DOMContentLoaded', function () {
   document.body.appendChild(errorMessageElement);
 
   function openRegistrationModal() {
-    removeCSPMeta();
-
-    axios
-      .get('/partials/registration.html')
-      .then(response => {
-        const html = response.data;
+    fetch('/Test_RTFM_project_team_JS/src/partials/registration.html')
+      .then(response => response.text())
+      .then(html => {
         const registrationModalContainer = document.getElementById(
           'registrationModalContainer'
         );
-        appendHtmlToContainer(html, registrationModalContainer);
+        registrationModalContainer.insertAdjacentHTML('beforeend', html);
 
         const registrationForm = document.getElementById('registrationForm');
         const closeIcon = document.querySelector('.close-icon');
@@ -69,9 +64,9 @@ document.addEventListener('DOMContentLoaded', function () {
           closeRegistrationModal();
         });
       })
-      .catch(error => {
-        console.error('Error loading registration content:', error);
-      });
+      .catch(error =>
+        console.error('Error loading registration content:', error)
+      );
   }
 
   function closeRegistrationModal() {
@@ -79,23 +74,5 @@ document.addEventListener('DOMContentLoaded', function () {
       'registrationModalContainer'
     );
     registrationModalContainer.innerHTML = '';
-  }
-
-  function appendHtmlToContainer(html, container) {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-
-    while (tempDiv.firstChild) {
-      container.appendChild(tempDiv.firstChild);
-    }
-  }
-
-  function removeCSPMeta() {
-    const cspMeta = document.querySelector(
-      'meta[http-equiv="Content-Security-Policy"]'
-    );
-    if (cspMeta) {
-      cspMeta.parentNode.removeChild(cspMeta);
-    }
   }
 });
