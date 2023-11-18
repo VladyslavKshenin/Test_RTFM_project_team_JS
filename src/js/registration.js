@@ -14,7 +14,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.body.appendChild(errorMessageElement);
 
+  // Новая функция, убирающая <meta> с CSP
+  function removeCSPMeta() {
+    const cspMeta = document.querySelector(
+      'meta[http-equiv="Content-Security-Policy"]'
+    );
+    if (cspMeta) {
+      cspMeta.parentNode.removeChild(cspMeta);
+    }
+  }
+
   function openRegistrationModal() {
+    // Вызываем функцию, чтобы убрать <meta> с CSP
+    removeCSPMeta();
+
     fetch('/partials/registration.html')
       .then(response => response.text())
       .then(html => {
