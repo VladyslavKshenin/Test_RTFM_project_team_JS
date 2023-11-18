@@ -15,9 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.body.appendChild(errorMessageElement);
 
   function openRegistrationModal() {
-    fetch(
-      'https://vladyslavkshenin.github.io/Test_RTFM_project_team_JS/partials/registration.html'
-    )
+    fetch('/partials/registration.html')
       .then(response => response.text())
       .then(html => {
         const registrationModalContainer = document.getElementById(
