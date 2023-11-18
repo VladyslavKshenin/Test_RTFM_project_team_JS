@@ -15,6 +15,12 @@ document.addEventListener('DOMContentLoaded', function () {
   document.body.appendChild(errorMessageElement);
 
   function openRegistrationModal() {
+    // Удалите следующие строки, которые добавляют метатег Content-Security-Policy
+    // const meta = document.createElement('meta');
+    // meta.httpEquiv = 'Content-Security-Policy';
+    // meta.content = "default-src 'none'; style-src 'unsafe-inline'; img-src data:; connect-src 'self'";
+    // document.head.appendChild(meta);
+
     fetch('/partials/registration.html')
       .then(response => response.text())
       .then(html => {
@@ -26,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const registrationForm = document.getElementById('registrationForm');
         const closeIcon = document.querySelector('.close-icon');
 
-        const handleSubmit = function (event) {
+        registrationForm.addEventListener('submit', function (event) {
           event.preventDefault();
 
           const name = document.getElementById('name').value;
@@ -41,38 +47,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
             closeRegistrationModal();
           } else {
-            handleMissingFields();
+            const missingFields = [];
+            if (!name) missingFields.push('Name');
+            if (!email) missingFields.push('Email');
+            if (!password) missingFields.push('Password');
+
+            errorMessageElement.textContent = `Please fill in the following fields: ${missingFields.join(
+              ', '
+            )}`;
+            errorMessageElement.style.display = 'block';
+
+            setTimeout(function () {
+              errorMessageElement.style.display = 'none';
+            }, 10000);
           }
-        };
-
-        const handleMissingFields = function () {
-          const name = document.getElementById('name').value;
-          const email = document.getElementById('email').value;
-          const password = document.getElementById('password').value;
-
-          const missingFields = [];
-          if (!name) missingFields.push('Name');
-          if (!email) missingFields.push('Email');
-          if (!password) missingFields.push('Password');
-
-          errorMessageElement.textContent = `Please fill in the following fields: ${missingFields.join(
-            ', '
-          )}`;
-          errorMessageElement.style.display = 'block';
-
-          setTimeout(function () {
-            errorMessageElement.style.display = 'none';
-          }, 10000);
-        };
-
-        registrationForm.addEventListener('submit', handleSubmit);
+        });
 
         closeIcon.addEventListener('click', function () {
           errorMessageElement.style.display = 'none';
           closeRegistrationModal();
         });
       })
-
       .catch(error =>
         console.error('Error loading registration content:', error)
       );
